@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dearest Laneyamn ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Garamond', serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a0f2e 50%, #0d1b2a 100%);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Canvas Backgrounds */
+        #starCanvas, #particleCanvas, #petalCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #particleCanvas {
+            z-index: 1;
+        }
+
+        #petalCanvas {
+            z-index: 2;
+        }
+
+        #starCanvas {
+            z-index: 0;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Scene Sections */
+        .scene {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .scene.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Heart Button Scene */
+        .heart-scene {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 40px rgba(255, 105, 180, 0.8));
+            animation: heartGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes heartGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 40px rgba(255, 105, 180, 0.8)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+            }
+            50% {
+                filter: drop-shadow(0 0 60px rgba(255, 105, 180, 1)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+            }
+        }
+
+        .crystal-heart {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            filter: brightness(1.2) saturate(1.3);
+        }
+
+        .heart-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* Heartbeat Animation */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            10% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.15); }
+            40% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-container.beating {
+            animation: heartbeat 1.2s ease-in-out;
+        }
+
+        /* Touch Instruction */
+        .touch-instruction {
+            margin-top: 60px;
+            font-size: 20px;
+            color: #ffb6c1;
+            animation: pulse 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 182, 193, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Name Reveal Scene */
+        .name-scene {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-direction: column;
+        }
+
+        .name-text {
+            font-size: clamp(48px, 12vw, 120px);
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffc700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+            animation: nameAppear 2s ease-out, nameGlow 3s ease-in-out infinite 2s;
+            letter-spacing: 3px;
+        }
+
+        @keyframes nameAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.5) rotateY(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        @keyframes nameGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 60px rgba(255, 105, 180, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 80px rgba(255, 105, 180, 0.6));
+            }
+        }
+
+        /* Message Scene */
+        .message-scene {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .message-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 0 50px rgba(255, 105, 180, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            animation: cardAppear 1s ease-out;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-text {
+            font-size: 18px;
+            line-height: 2;
+            color: #f0e6ff;
+            letter-spacing: 1px;
+            min-height: 400px;
+        }
+
+        .message-text.typing {
+            border-right: 3px solid #ffd700;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% {
+                border-right-color: #ffd700;
+            }
+            50%, 100% {
+                border-right-color: transparent;
+            }
+        }
+
+        /* Final Heart Particle Scene */
+        .final-scene {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-direction: column;
+        }
+
+        .final-heart-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 40px;
+        }
+
+        .final-message {
+            font-size: clamp(36px, 8vw, 60px);
+            text-align: center;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffc700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+            line-height: 1.5;
+            animation: finalAppear 1.5s ease-out;
+        }
+
+        @keyframes finalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-player:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .music-icon {
+            font-size: 24px;
+        }
+
+        .music-text {
+            font-size: 14px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .equalizer {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+        }
+
+        .bar {
+            width: 3px;
+            height: 12px;
+            background: linear-gradient(180deg, #ffd700, #ff69b4);
+            border-radius: 2px;
+            animation: bounce 0.6s ease-in-out infinite;
+        }
+
+        .bar:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .bar:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { height: 8px; }
+            50% { height: 16px; }
+        }
+
+        /* Scroll Hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffb6c1;
+            font-size: 14px;
+            animation: scrollBounce 2s ease-in-out infinite;
+            text-align: center;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .heart-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .heart-text {
+                font-size: 14px;
+            }
+
+            .touch-instruction {
+                font-size: 16px;
+                margin-top: 40px;
+            }
+
+            .message-card {
+                padding: 40px 25px;
+            }
+
+            .message-text {
+                font-size: 16px;
+                line-height: 1.8;
+                min-height: auto;
+            }
+
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+            }
+
+            .music-text {
+                display: none;
+            }
+
+            .final-heart-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .scene {
+                min-height: 100vh;
+            }
+        }
+
+        /* Floating Hearts Background */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            opacity: 0.6;
+            animation: float-up 8s ease-in infinite;
+            z-index: 5;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Overlay for transitions */
+        .transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 8;
+            animation: fadeInOut 1s ease-out;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas Elements -->
+    <canvas id="starCanvas"></canvas>
+    <canvas id="particleCanvas"></canvas>
+    <canvas id="petalCanvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Scene 1: Heart Button -->
+        <div class="scene active heart-scene" id="scene1">
+            <div class="heart-container" id="heartButton">
+                <svg class="crystal-heart" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff69b4;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#ffd700;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff1493;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <path d="M50,85 C25,70 10,55 10,40 C10,25 20,15 30,15 C40,15 50,25 50,25 C50,25 60,15 70,15 C80,15 90,25 90,40 C90,55 75,70 50,85 Z" 
+                          fill="url(#heartGradient)" filter="url(#glow)" opacity="0.95"/>
+                </svg>
+                <div class="heart-text">Touch My Heart ❤️</div>
+            </div>
+            <div class="touch-instruction">Click the Heart ↓</div>
+        </div>
+
+        <!-- Scene 2: Name Reveal -->
+        <div class="scene" id="scene2">
+            <div class="name-text">LANEYAMN ❤️</div>
+        </div>
+
+        <!-- Scene 3: Romantic Message -->
+        <div class="scene" id="scene3">
+            <div class="message-card">
+                <div class="message-text typing" id="messageText"></div>
+            </div>
+            <div class="scroll-hint">Scroll Down ↓</div>
+        </div>
+
+        <!-- Scene 4: Final Heart -->
+        <div class="scene final-scene" id="scene4">
+            <div class="final-heart-container" id="finalHeartContainer"></div>
+            <div class="final-message">
+                LANEYAMN ❤️<br>
+                Forever & Always
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player" id="musicPlayer">
+        <span class="music-icon">🎵</span>
+        <span class="music-text">Music</span>
+        <div class="equalizer">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const CONFIG = {
+            scenes: {
+                heart: 'scene1',
+                name: 'scene2',
+                message: 'scene3',
+                final: 'scene4'
+            },
+            colors: {
+                primary: '#ff69b4',
+                gold: '#ffd700',
+                crimson: '#dc143c',
+                white: '#ffffff'
+            },
+            animation: {
+                heartbeatDuration: 1.2,
+                transitionDelay: 500,
+                messageTypingSpeed: 50
+            }
+        };
+
+        const message = `My dearest Laneyamn,
+
+You are the most beautiful chapter of my life.
+Every smile of yours brightens my world.
+Every moment with you becomes a memory I treasure forever.
+
+No matter where life takes us,
+my heart will always choose you,
+today, tomorrow, and every day after.
+
+You are my happiness,
+my peace,
+my favorite person,
+and the love of my life.
+
+Forever Yours ❤️`;
+
+        // ==================== STATE MANAGEMENT ====================
+        let appState = {
+            currentScene: 1,
+            heartClicked: false,
+            messageDisplayed: false,
+            musicPlaying: false,
+            particles: [],
+            petals: []
+        };
+
+        // ==================== CANVAS SETUP ====================
+        const starCanvas = document.getElementById('starCanvas');
+        const particleCanvas = document.getElementById('particleCanvas');
+        const petalCanvas = document.getElementById('petalCanvas');
+
+        const starCtx = starCanvas.getContext('2d');
+        const particleCtx = particleCanvas.getContext('2d');
+        const petalCtx = petalCanvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvases() {
+            starCanvas.width = window.innerWidth;
+            starCanvas.height = window.innerHeight;
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+            petalCanvas.width = window.innerWidth;
+            petalCanvas.height = window.innerHeight;
+        }
+
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
+
+        // ==================== STAR FIELD ====================
+        const stars = [];
+
+        function initStars() {
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * starCanvas.width,
+                    y: Math.random() * starCanvas.height,
+                    radius: Math.random() * 1.5,
+                    opacity: Math.random() * 0.5 + 0.3,
+                    twinkleSpeed: Math.random() * 0.02 + 0.01,
+                    twinkleAmount: 0
+                });
+            }
+        }
+
+        function drawStars() {
+            starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+            
+            stars.forEach(star => {
+                star.twinkleAmount += star.twinkleSpeed;
+                const opacity = star.opacity + Math.sin(star.twinkleAmount) * 0.3;
+                
+                starCtx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, opacity)})`;
+                starCtx.beginPath();
+                starCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                starCtx.fill();
+
+                // Star glow
+                starCtx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.3})`;
+                starCtx.lineWidth = 0.5;
+                starCtx.stroke();
+            });
+        }
+
+        initStars();
+
+        // ==================== PARTICLE SYSTEM ====================
+        class Particle {
+            constructor(x, y, type = 'spark') {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8;
+                this.ax = (Math.random() - 0.5) * 0.2;
+                this.ay = 0.1;
+                this.life = 1;
+                this.decay = Math.random() * 0.01 + 0.005;
+                this.size = Math.random() * 3 + 2;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+            }
+
+            update() {
+                this.vx += this.ax;
+                this.vy += this.ay;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                this.rotation += this.rotationSpeed;
+            }
+
+            draw(ctx) {
+                if (this.life <= 0) return;
+
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+
+                if (this.type === 'spark') {
+                    ctx.fillStyle = CONFIG.colors.gold;
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                } else if (this.type === 'heart') {
+                    ctx.fillStyle = CONFIG.colors.primary;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            }
+        }
+
+        function createParticleBurst(x, y, count = 30, type = 'spark') {
+            for (let i = 0; i < count; i++) {
+                appState.particles.push(new Particle(x, y, type));
+            }
+        }
+
+        function updateParticles() {
+            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+            appState.particles = appState.particles.filter(p => p.life > 0);
+            appState.particles.forEach(p => {
+                p.update();
+                p.draw(particleCtx);
+            });
+        }
+
+        // ==================== PETAL SYSTEM ====================
+        class Petal {
+            constructor(x = null, y = null) {
+                this.x = x !== null ? x : Math.random() * petalCanvas.width;
+                this.y = y !== null ? y : -20;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = Math.random() * 2 + 1;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+                this.size = Math.random() * 8 + 4;
+                this.life = 1;
+                this.opacity = Math.random() * 0.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.rotation += this.rotationSpeed;
+                this.vx *= 0.99;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+
+                // Draw petal
+                ctx.fillStyle = '#ff69b4';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size * 1.5, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        function createPetalBurst(x, y, count = 20) {
+            for (let i = 0; i < count; i++) {
+                appState.petals.push(new Petal(x, y));
+            }
+        }
+
+        function updatePetals() {
+            petalCtx.clearRect(0, 0, petalCanvas.width, petalCanvas.height);
+
+            appState.petals = appState.petals.filter(p => p.y < petalCanvas.height);
+            appState.petals.forEach(p => {
+                p.update();
+                p.draw(petalCtx);
+            });
+        }
+
+        // ==================== FLOATING HEARTS ====================
+        function createFloatingHearts() {
+            const container = document.querySelector('.container');
+            setInterval(() => {
+                if (Math.random() > 0.5) {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.textContent = '❤️';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 10000);
+                }
+            }, 1000);
+        }
+
+        // ==================== AUDIO SYSTEM ====================
+        function createHeartbeatAudio() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            function playHeartbeat() {
+                // First beat
+                const osc1 = audioContext.createOscillator();
+                const gain1 = audioContext.createGain();
+                osc1.connect(gain1);
+                gain1.connect(audioContext.destination);
+                
+                osc1.frequency.value = 60;
+                gain1.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                osc1.start(audioContext.currentTime);
+                osc1.stop(audioContext.currentTime + 0.1);
+                
+                // Second beat
+                setTimeout(() => {
+                    const osc2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    
+                    osc2.frequency.value = 80;
+                    gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    
+                    osc2.start(audioContext.currentTime);
+                    osc2.stop(audioContext.currentTime + 0.1);
+                }, 150);
+            }
+
+            return {
+                play: playHeartbeat,
+                audioContext: audioContext
+            };
+        }
+
+        const audio = createHeartbeatAudio();
+
+        // ==================== ROMANTIC MUSIC ====================
+        function createRomanticMusic() {
+            const audioContext = audio.audioContext;
+            let isPlaying = false;
+
+            function createBackgroundMusic() {
+                if (isPlaying) return;
+                isPlaying = true;
+
+                const notes = [264, 297, 330, 352, 396]; // C, D, E, F, G
+                let currentNote = 0;
+
+                const playNote = () => {
+                    if (!isPlaying) return;
+
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.type = 'sine';
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    osc.frequency.value = notes[currentNote % notes.length];
+                    gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+
+                    osc.start(audioContext.currentTime);
+                    osc.stop(audioContext.currentTime + 1);
+
+                    currentNote++;
+                    setTimeout(playNote, 1000);
+                };
+
+                playNote();
+            }
+
+            function stopMusic() {
+                isPlaying = false;
+            }
+
+            return {
+                play: createBackgroundMusic,
+                stop: stopMusic,
+                isPlaying: () => isPlaying
+            };
+        }
+
+        const music = createRomanticMusic();
+
+        // ==================== SCENE MANAGEMENT ====================
+        function transitionToScene(sceneNum) {
+            // Create transition overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'transition-overlay';
+            document.body.appendChild(overlay);
+
+            setTimeout(() => {
+                // Hide all scenes
+                document.querySelectorAll('.scene').forEach(scene => {
+                    scene.classList.remove('active');
+                });
+
+                // Show target scene
+                const targetScene = document.getElementById(`scene${sceneNum}`);
+                targetScene.classList.add('active');
+
+                setTimeout(() => overlay.remove(), 1000);
+            }, 500);
+
+            appState.currentScene = sceneNum;
+        }
+
+        // ==================== HEART BUTTON INTERACTION ====================
+        const heartButton = document.getElementById('heartButton');
+
+        heartButton.addEventListener('click', () => {
+            if (appState.heartClicked) return;
+
+            appState.heartClicked = true;
+            heartButton.classList.add('beating');
+
+            // Play heartbeat sound
+            audio.play();
+
+            // Create particle burst
+            const rect = heartButton.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            createParticleBurst(x, y, 50, 'spark');
+            createPetalBurst(x, y, 30);
+
+            // Transition sequence
+            setTimeout(() => {
+                transitionToScene(2);
+                createParticleBurst(window.innerWidth / 2, window.innerHeight / 2, 100, 'heart');
+            }, 1000);
+
+            setTimeout(() => {
+                transitionToScene(3);
+                startTypewriter();
+            }, 3500);
+        });
+
+        // ==================== TYPEWRITER EFFECT ====================
+        function startTypewriter() {
+            const messageText = document.getElementById('messageText');
+            let index = 0;
+
+            function type() {
+                if (index < message.length) {
+                    messageText.textContent += message[index];
+                    index++;
+                    setTimeout(type, CONFIG.animation.messageTypingSpeed);
+                } else {
+                    messageText.classList.remove('typing');
+                    setTimeout(() => {
+                        transitionToScene(4);
+                        createFinalHeartParticles();
+                    }, 2000);
+                }
+            }
+
+            type();
+        }
+
+        // ==================== FINAL HEART PARTICLE EFFECT ====================
+        function createFinalHeartParticles() {
+            const container = document.getElementById('finalHeartContainer');
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+                // Create heart shape from particles
+                const heartShape = [];
+                for (let t = 0; t < Math.PI * 2; t += 0.05) {
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    heartShape.push({ x, y });
+                }
+
+            // Create particles in heart shape
+            heartShape.forEach((point, i) => {
+                setTimeout(() => {
+                    const px = centerX + point.x * 8;
+                    const py = centerY + point.y * 8;
+                    
+                    // Create multiple particles per point
+                    for (let j = 0; j < 2; j++) {
+                        createParticleBurst(px, py, 3, 'heart');
+                    }
+                }, i * 10);
+            });
+
+            // Continuous particle generation
+            const continuousInterval = setInterval(() => {
+                const randomPoint = heartShape[Math.floor(Math.random() * heartShape.length)];
+                const px = centerX + randomPoint.x * 8;
+                const py = centerY + randomPoint.y * 8;
+                createParticleBurst(px, py, 2, 'heart');
+            }, 100);
+
+                // Stop after 5 seconds
+                setTimeout(() => clearInterval(continuousInterval), 5000);
+        }
+
+        // ==================== MUSIC PLAYER ====================
+        const musicPlayer = document.getElementById('musicPlayer');
+
+        musicPlayer.addEventListener('click', () => {
+            appState.musicPlaying = !appState.musicPlaying;
+            if (appState.musicPlaying) {
+                music.play();
+                musicPlayer.style.background = 'rgba(255, 215, 0, 0.2)';
+            } else {
+                music.stop();
+                musicPlayer.style.background = 'rgba(255, 255, 255, 0.1)';
+            }
+        });
+
+        // ==================== SCROLL HANDLING ====================
+        window.addEventListener('scroll', () => {
+            const scenes = document.querySelectorAll('.scene');
+            const scrollPosition = window.scrollY;
+            const viewportHeight = window.innerHeight;
+
+            scenes.forEach((scene, index) => {
+                const scenePosition = scene.offsetTop;
+                if (scrollPosition + viewportHeight / 2 > scenePosition) {
+                    appState.currentScene = index + 1;
+                }
+            });
+        });
+
+        // ==================== ANIMATION LOOP ====================
+        function animate() {
+            drawStars();
+            updateParticles();
+            updatePetals();
+
+            // Continuously add petals
+            if (appState.currentScene >= 2 && Math.random() > 0.98) {
+                appState.petals.push(new Petal());
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // ==================== INITIALIZATION ====================
+        function init() {
+            createFloatingHearts();
+            animate();
+
+            // Add scroll hint
+            const scene3 = document.getElementById('scene3');
+            if (scene3) {
+                scene3.addEventListener('scroll', () => {
+                    const hint = scene3.querySelector('.scroll-hint');
+                    if (hint) hint.style.display = 'none';
+                });
+            }
+        }
+
+        // Start the experience
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
